@@ -88,13 +88,21 @@ public class MainActivity extends AppCompatActivity
         boolean transaccion = false;
         Fragment fragment = null;
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.muestraPeliculas) {
+
+        } else if (id == R.id.videoclubsCercanos) {
+
+
+
+        }
+        else if (id == R.id.bandaSonora) {
+            
+        }
+
+        else if (id == R.id.buscaPelicula) {
             startActivity(new Intent(this,MuestraPeliculas.class));
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+            transaccion = false;
+        } else if (id == R.id.preferencias) {
             startActivity(new Intent(this,PreferenciasActivity.class));
             transaccion = false;
         }

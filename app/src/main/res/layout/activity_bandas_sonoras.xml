@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_bandas_sonoras"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.pedroantonio.videoclubandroid.BandasSonorasActivity">
+
+    <TextView
+        android:text="Introduce película:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvIntroduce" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Introduce película aquí"
+        android:ems="10"
+        android:id="@+id/etBuscaPelicula" />
+
+    <Button
+        android:text="Buscar banda sonora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btBuscar" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvSonidoEncontrado" />
+
+    <TextView
+        android:text="Sonido para la pelicula elegida:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvInformacion"
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
+
+    <CheckBox
+        android:text="Sonido On/ Off"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbSonidoOnOff" />
+</LinearLayout>

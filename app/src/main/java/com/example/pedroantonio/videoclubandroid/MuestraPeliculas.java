@@ -14,13 +14,10 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
 import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -112,6 +109,8 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
                                     tvActores.setText("Actores: ");
                                     tvGuion.setText("Guión: ");
                                     tvIMDBRating.setText("Puntuación IMDB: ");
+
+                                    // Asignación de los datos
                                     tvTitulo.append(map.get("Title").toString());
                                     tvAnyo.append(map.get("Year").toString());
                                     tvFechaSalida.append(map.get("Released").toString());
