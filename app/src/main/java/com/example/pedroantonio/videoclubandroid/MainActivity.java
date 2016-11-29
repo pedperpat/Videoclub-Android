@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Historial.class));
             return true;
         }
 
@@ -96,7 +97,8 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if (id == R.id.bandaSonora) {
-            
+            startActivity(new Intent(this,BandasSonorasActivity.class));
+            transaccion = false;
         }
 
         else if (id == R.id.buscaPelicula) {

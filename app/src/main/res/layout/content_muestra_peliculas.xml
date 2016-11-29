@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:weightSum="1">
 
         <TextView
             android:layout_width="match_parent"
@@ -25,10 +27,10 @@ android:layout_height="fill_parent">
             android:id="@+id/textView4" />
 
         <Button
-            android:text="Mostrar catálogo de películas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btPeliculas" />
+            android:id="@+id/btPeliculas"
+            android:text="Mostrar información" />
 
         <EditText
             android:layout_width="match_parent"
@@ -83,10 +85,10 @@ android:layout_height="fill_parent">
             android:layout_height="wrap_content"
             android:id="@+id/tvPoster" />
 
-        <WebView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/webView" />
+            android:id="@+id/imageView" />
 
     </LinearLayout>
 

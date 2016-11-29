@@ -1,20 +1,17 @@
 package com.example.pedroantonio.videoclubandroid;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,6 +21,10 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class MostrarVideoclubsCercanos extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -35,12 +36,32 @@ public class MostrarVideoclubsCercanos extends Fragment implements GoogleApiClie
     GoogleMap map;
     LatLng latlng;
     private final String TAG = "MyAwesomeApp";
-
+    //private LocationClient mLocationClient;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest lr;
     MapFragment mapFragment;
     MapView mv;
     private static View view;
+
+    static class StoreLocation {
+        public LatLng mLatLng;
+        public String mId;
+        StoreLocation(LatLng latlng, String id) {
+            mLatLng = latlng;
+            mId = id;
+        }
+    }
+
+    // Instanciar un objeto Geofence en la clase actual.
+ /*   public Geofence geofence() {
+        id = UUID.randomUUID().toString();
+        return new Geofence.Builder()
+                .setRequestId(id)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setCircularRegion(latitude, longitude, radius)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .build();
+    }  */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

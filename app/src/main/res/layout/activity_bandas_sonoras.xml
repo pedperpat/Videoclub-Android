@@ -44,9 +44,25 @@
         android:textSize="18sp"
         android:textStyle="normal|bold" />
 
-    <CheckBox
-        android:text="Sonido On/ Off"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cbSonidoOnOff" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Reproducir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btPlay"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Parar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btStop"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
 </LinearLayout>
