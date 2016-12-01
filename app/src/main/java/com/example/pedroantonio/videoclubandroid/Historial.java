@@ -55,7 +55,6 @@ public class Historial extends AppCompatActivity {
                     new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
         for (int i = 0; i < peliculas.size(); i++) {
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -97,4 +96,3 @@ public class Historial extends AppCompatActivity {
         }
     }
 }
-

@@ -74,7 +74,8 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
                 }
 
                 // Hilo de la conexión al servicio web y su manipulación y asignación de datos en los componentes de la activity.
-                runOnUiThread(new Runnable() {
+                runOnUiThread(
+                        new Runnable() {
                     public void run(){
                         try {
                             URL url = new URL("http://www.omdbapi.com/?t="  +

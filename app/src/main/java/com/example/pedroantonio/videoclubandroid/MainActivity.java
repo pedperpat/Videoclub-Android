@@ -3,6 +3,7 @@ package com.example.pedroantonio.videoclubandroid;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,7 +20,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    String[] correos = new String[]{"desarroladores_videoclub@gmail.com"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +32,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                composeEmail(correos,"Contacto con los desarrolladores");
             }
         });
 
@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void composeEmail(String[] addresses, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -75,7 +85,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, Historial.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -92,9 +101,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.muestraPeliculas) {
 
         } else if (id == R.id.videoclubsCercanos) {
-
-
-
+            startActivity(new Intent(this,VideoCercanos.class));
+            transaccion = false;
         }
         else if (id == R.id.bandaSonora) {
             startActivity(new Intent(this,BandasSonorasActivity.class));
