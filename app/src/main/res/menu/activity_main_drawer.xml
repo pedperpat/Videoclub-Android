@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/muestraContactos"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Contactos con la app" />
+        <item
+            android:id="@+id/videoclubsCercanos"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Mostrar videoclubs cercanos" />
+        <item
+            android:id="@+id/buscaPelicula"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Buscar pelicula" />
+        <item
+            android:id="@+id/bandaSonora"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Escuchar banda sonora de una película" />
+        <item
+            android:id="@+id/preferencias"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Preferencias" />
+    </group>
+
+</menu>
