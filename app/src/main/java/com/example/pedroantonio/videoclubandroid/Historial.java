@@ -1,6 +1,5 @@
 package com.example.pedroantonio.videoclubandroid;
 
-import android.app.ActionBar;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -27,6 +26,7 @@ public class Historial extends AppCompatActivity {
         setContentView(R.layout.activity_historial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         try {
             BufferedReader fin =
                     new BufferedReader(
@@ -47,14 +47,13 @@ public class Historial extends AppCompatActivity {
         } catch (Exception ex) {
         }
         final LinearLayout lm = (LinearLayout) findViewById(R.id.linear);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
 
         if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy =
                     new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
         for (int i = 0; i < peliculas.size(); i++) {
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -63,17 +62,16 @@ public class Historial extends AppCompatActivity {
             layout.addView(tvSeparador1);
             /////////////////////////////////////////// Imagen con la portada de la película
             ImageView image = new ImageView(getBaseContext());
-            image.setImageBitmap(muestraPeliculas.getBitmapFromURL(peliculas.get(i)
-                    .getPortada().toString()));
+            image.setImageBitmap(muestraPeliculas.getBitmapFromURL(peliculas.get(i).getPortada()));
             layout.addView(image);
             /////////////////////////////////////////// Boton de título
             Button btTituloDinamico = new Button(this);
-            btTituloDinamico.setText(peliculas.get(i).getTitulo().toString());
+            btTituloDinamico.setText(peliculas.get(i).getTitulo());
             btTituloDinamico.setEnabled(false);
             layout.addView(btTituloDinamico);
             /////////////////////////////////////////// Botón de año
             Button btAnyo = new Button(this);
-            btAnyo.setText(peliculas.get(i).getAnyo().toString());
+            btAnyo.setText(peliculas.get(i).getAnyo());
             btAnyo.setEnabled(false);
             layout.addView(btAnyo);
             /////////////////////////////////////////// Textview con la información
@@ -82,9 +80,9 @@ public class Historial extends AppCompatActivity {
                 tvInfo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             }
             tvInfo.setText("Información acerca de la película: \n" + "Fecha de salida: "
-                    + peliculas.get(i).getFechaSalida().toString() + "\n" + " Duración: " +
-                    peliculas.get(i).getDuración().toString() + "\n" + " Género: " +
-                    peliculas.get(i).getGenero().toString());
+                    + peliculas.get(i).getFechaSalida() + "\n" + " Duración: "
+                    + peliculas.get(i).getDuración() + "\n" + " Género: "
+                    + peliculas.get(i).getGenero());
             layout.addView(tvInfo);
             TextView tvSeparador2 = new TextView(this);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

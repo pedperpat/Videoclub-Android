@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,9 +26,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+
 import android.os.Vibrator;
 
-public class MuestraPeliculas extends AppCompatActivity implements View.OnClickListener{
+public class MuestraPeliculas extends AppCompatActivity implements View.OnClickListener {
     Button btBuscar;
     TextView tvInformacion, tvPoster, tvGenero, tvFechaSalida, tvTitulo, tvAnyo, tvDuracion, tvGuion,
             tvActores, tvIMDBRating;
@@ -41,25 +44,25 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
         toolbar.setTitle("Busca una pelicula");
         setSupportActionBar(toolbar);
 
-        imageView = (ImageView)findViewById(R.id.imageView);
-        tvPoster = (TextView)findViewById(R.id.tvPoster);
-        tvGenero = (TextView)findViewById(R.id.tvGenero);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        tvPoster = (TextView) findViewById(R.id.tvPoster);
+        tvGenero = (TextView) findViewById(R.id.tvGenero);
         tvFechaSalida = (TextView) findViewById(R.id.tvFechaSalida);
-        tvTitulo = (TextView)findViewById(R.id.tvTitulo);
-        tvAnyo = (TextView)findViewById(R.id.tvAnyo);
-        tvDuracion = (TextView)findViewById(R.id.tvDuracion);
-        tvGuion = (TextView)findViewById(R.id.tvGuion);
-        tvActores = (TextView)findViewById(R.id.tvActores);
-        tvIMDBRating = (TextView)findViewById(R.id.tvIMDBRating);
-        tvInformacion = (TextView)findViewById(R.id.tvTitulo);
-        btBuscar = (Button)findViewById(R.id.btPeliculas);
-        etNombrePelicula = (EditText)findViewById(R.id.etNameOfMovie);
+        tvTitulo = (TextView) findViewById(R.id.tvTitulo);
+        tvAnyo = (TextView) findViewById(R.id.tvAnyo);
+        tvDuracion = (TextView) findViewById(R.id.tvDuracion);
+        tvGuion = (TextView) findViewById(R.id.tvGuion);
+        tvActores = (TextView) findViewById(R.id.tvActores);
+        tvIMDBRating = (TextView) findViewById(R.id.tvIMDBRating);
+        tvInformacion = (TextView) findViewById(R.id.tvTitulo);
+        btBuscar = (Button) findViewById(R.id.btPeliculas);
+        etNombrePelicula = (EditText) findViewById(R.id.etNameOfMovie);
         etNombrePelicula.setOnClickListener(this);
         btBuscar.setOnClickListener(this);
 
         imageView.setVisibility(View.INVISIBLE);
-
     }
+
 
     @Override
     public void onClick(View v) {
@@ -74,95 +77,92 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
                 // Hilo de la conexión al servicio web y su manipulación y asignación de datos en los componentes de la activity.
                 runOnUiThread(
                         new Runnable() {
-                    public void run(){
-                        try {
-                            URL url = new URL("http://www.omdbapi.com/?t="  +
-                                    URLEncoder.encode(etNombrePelicula.getText().toString(), "UTF-8"));
+                            public void run() {
+                                try {
+                                    URL url = new URL("http://www.omdbapi.com/?t=" +
+                                            URLEncoder.encode(etNombrePelicula.getText().toString(), "UTF-8"));
+                                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                    connection.setRequestProperty("User-Agent", "Mozilla/5.0" +
+                                            " (Linux; Android 1.5; es-ES) Ejemplo HTTP");
 
-                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                            connection.setRequestProperty("User-Agent", "Mozilla/5.0" +
-                                    " (Linux; Android 1.5; es-ES) Ejemplo HTTP");
-                            int respuesta = connection.getResponseCode();
+                                    int respuesta = connection.getResponseCode();
 
-                            if (respuesta == HttpURLConnection.HTTP_OK) {
-                                final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                // Limpio todos los datos que tenían los textviews.
-                                tvTitulo.setText("");
-                                tvAnyo.setText("");
-                                tvFechaSalida.setText("");
-                                tvDuracion.setText("");
-                                tvPoster.setText("");
-                                tvGenero.setText("");
-                                tvActores.setText("");
-                                tvGuion.setText("");
-                                tvIMDBRating.setText("");
+                                    if (respuesta == HttpURLConnection.HTTP_OK) {
+                                        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                        // Limpio todos los datos que tenían los textviews.
+                                        tvTitulo.setText("");
+                                        tvAnyo.setText("");
+                                        tvFechaSalida.setText("");
+                                        tvDuracion.setText("");
+                                        tvPoster.setText("");
+                                        tvGenero.setText("");
+                                        tvActores.setText("");
+                                        tvGuion.setText("");
+                                        tvIMDBRating.setText("");
 
-                                InputStream input = url.openStream();
+                                        InputStream input = url.openStream();
 
-                                // Manipulo el json usando gson y lo transformo en un hashmap para buscar por clave-valor.
-                                Map<String, String> map = new Gson().fromJson(new InputStreamReader(
-                                        input, "UTF-8"), new TypeToken<Map<String, String>>() {
-                                }.getType());
+                                        // Manipulo el json usando gson y lo transformo en un hashmap para buscar por clave-valor.
+                                        Map<String, String> map = new Gson().fromJson(new InputStreamReader(
+                                                input, "UTF-8"), new TypeToken<Map<String, String>>() {
+                                        }.getType());
 
-                                // Comprobación de si la película está disponible en el servicio web.
-                                // Si la película está disponible vibrará 1 vez, si no está disponible vibrará 2 veces.
-                                if (map.get("Response").toString().equals("False")) {
-                                    tvTitulo.setText("No hay datos acerca de la película: '" + etNombrePelicula.getText().toString() + "'");
-                                    imageView.setVisibility(View.INVISIBLE);
-                                    final long[] pattern = {300,300};
-                                    new Thread(){
-                                        @Override
-                                        public void run() {
-                                            for(int i = 0; i < 2; i++){
-                                                v.vibrate(pattern, -1);
-                                                try {
-                                                    Thread.sleep(600);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
+                                        // Comprobación de si la película está disponible en el servicio web.
+                                        // Si la película está disponible vibrará 1 vez, si no está disponible vibrará 2 veces.
+                                        if (map.get("Response").toString().equals("False")) {
+                                            tvTitulo.setText("No hay datos acerca de la película: '" + etNombrePelicula.getText().toString() + "'");
+                                            imageView.setVisibility(View.INVISIBLE);
+                                            final long[] pattern = {300, 300};
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    for (int i = 0; i < 2; i++) {
+                                                        v.vibrate(pattern, -1);
+                                                        try {
+                                                            Thread.sleep(600);
+                                                        } catch (InterruptedException e) {
+                                                        }
+                                                    }
                                                 }
+                                            }.start();
+                                        } else { // En caso de estar disponible, fijo los datos a los correspondientes textviews.
+                                            tvTitulo.setText("Titulo: " + map.get("Title").toString());
+                                            tvAnyo.setText("Año: " + map.get("Year").toString());
+                                            tvFechaSalida.setText("Fecha de salida: " + map.get("Released").toString());
+                                            tvDuracion.setText("Duración: " + map.get("Runtime").toString());
+                                            tvPoster.setText("Imagen de la película: ");
+                                            tvGenero.setText("Género: " + map.get("Genre").toString());
+                                            tvActores.setText("Actores: " + map.get("Actors").toString());
+                                            tvGuion.setText("Guión: " + map.get("Plot").toString());
+                                            tvIMDBRating.setText("Puntuación IMDB: " + map.get("imdbRating").toString());
+
+                                            // Compruebo que la película tenga una portada disponible en la base de datos
+                                            if (map.get("Poster").toString().equals("N/A")) {
+                                                tvPoster.append("No hay portada disponible");
+                                                imageView.setVisibility(View.INVISIBLE);
+                                            } else {
+                                                imageView.setVisibility(View.VISIBLE);
+                                                imageView.setImageBitmap(getBitmapFromURL(map.get("Poster").toString()));
+                                            }
+
+                                            try {
+                                                OutputStreamWriter fout =
+                                                        new OutputStreamWriter(
+                                                                openFileOutput("historial.txt", Context.MODE_APPEND));
+                                                fout.append(map.get("Title") + "|" + map.get("Year") + "|"
+                                                        + map.get("Released") + "|" + map.get("Runtime") + "|"
+                                                        + map.get("Genre") + "|" + map.get("Poster") + "|");
+                                                fout.write("\n");
+                                                fout.close();
+                                            } catch (Exception ex) {
                                             }
                                         }
-                                    }.start();
-                                } else { // En caso de estar disponible, fijo los datos a los correspondientes textviews.
-                                    tvTitulo.setText("Titulo: " + map.get("Title").toString());
-                                    tvAnyo.setText("Año: " + map.get("Year").toString());
-                                    tvFechaSalida.setText("Fecha de salida: " + map.get("Released").toString());
-                                    tvDuracion.setText("Duración: " + map.get("Runtime").toString());
-                                    tvPoster.setText("Imagen de la película: ");
-                                    tvGenero.setText("Género: " + map.get("Genre").toString());
-                                    tvActores.setText("Actores: " + map.get("Actors").toString());
-                                    tvGuion.setText("Guión: " + map.get("Plot").toString());
-                                    tvIMDBRating.setText("Puntuación IMDB: " + map.get("imdbRating").toString());
-
-                                    // Compruebo que la película tenga una portada disponible en la base de datos
-                                    if (map.get("Poster").toString().equals("N/A")) {
-                                        tvPoster.append("No hay portada disponible");
-                                        imageView.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        imageView.setVisibility(View.VISIBLE);
-                                        imageView.setImageBitmap(getBitmapFromURL(map.get("Poster").toString()));
+                                        v.vibrate(300);
                                     }
-                                    try
-                                    {
-                                        OutputStreamWriter fout=
-                                                new OutputStreamWriter(
-                                                        openFileOutput("historial.txt", Context.MODE_APPEND));
-                                        fout.append(map.get("Title") + "|" + map.get("Year") + "|"
-                                                + map.get("Released") + "|" + map.get("Runtime") + "|"
-                                                + map.get("Genre") + "|" + map.get("Poster") + "|");
-                                        fout.write("\n");
-                                        fout.close();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                    }
+                                } catch (JsonIOException | JsonSyntaxException | IOException e) {
                                 }
-                                v.vibrate(300);
                             }
-                        } catch (JsonIOException | JsonSyntaxException | IOException e){
-                        }
-                   }
-                });
+                        });
                 break;
             case R.id.etNameOfMovie:
                 etNombrePelicula.setText("");
@@ -171,6 +171,7 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
     public static Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
@@ -181,7 +182,6 @@ public class MuestraPeliculas extends AppCompatActivity implements View.OnClickL
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
             return myBitmap;
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }

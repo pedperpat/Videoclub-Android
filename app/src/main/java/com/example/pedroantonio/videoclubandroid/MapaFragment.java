@@ -1,18 +1,25 @@
 package com.example.pedroantonio.videoclubandroid;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -24,12 +31,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
     MarkerOptions bigOrange;
     MarkerOptions luceros;
     MarkerOptions chaplin;
-    LatLng posicionActual = new LatLng(VideoCercanos.latitude, VideoCercanos.longitude);
+    private Circle geoFenceLimits;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-
         mMapView = (MapView) rootView.findViewById(R.id.mapview);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -44,15 +50,14 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                googleMap.setMyLocationEnabled(true);
                 setUpMap();
-
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(posicionActual).zoom(15).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
         return rootView;
@@ -88,7 +93,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setUpMap() {
-        // TODO: Imágenes en los marcadores
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.setMyLocationEnabled(true);
 
         torrent = new MarkerOptions().position(new LatLng(38.39452453256175, -0.5147534608840942))
                 .title("VideoClub Torrent").snippet("Videoclub-Cafetería");
@@ -105,5 +111,57 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         luceros = new MarkerOptions().position(new LatLng(38.34609912392657, -0.4906189441680908))
                 .title("Videoclub luceros").snippet("El mejor de Alicante");
         googleMap.addMarker(luceros);
+
+        // Dibuja un círculo que simboliza el radio de la geofence en cada marca del mapa.
+        if (geoFenceLimits != null)
+            geoFenceLimits.remove();
+        CircleOptions circleTorrent = new CircleOptions()
+                .center(torrent.getPosition())
+                .strokeColor(Color.argb(40, 255, 0, 0))
+                .fillColor(Color.argb(90, 255, 0, 0))
+                .radius(100);
+        geoFenceLimits = googleMap.addCircle(circleTorrent);
+
+        CircleOptions circleChaplin = new CircleOptions()
+                .center(chaplin.getPosition())
+                .strokeColor(Color.argb(40, 255, 0, 0))
+                .fillColor(Color.argb(90, 255, 0, 0))
+                .radius(100);
+        geoFenceLimits = googleMap.addCircle(circleChaplin);
+
+        CircleOptions circleVideo10 = new CircleOptions()
+                .center(video10.getPosition())
+                .strokeColor(Color.argb(40, 255, 0, 0))
+                .fillColor(Color.argb(90, 255, 0, 0))
+                .radius(100);
+        geoFenceLimits = googleMap.addCircle(circleVideo10);
+
+        CircleOptions circleBO = new CircleOptions()
+                .center(bigOrange.getPosition())
+                .strokeColor(Color.argb(40, 255, 0, 0))
+                .fillColor(Color.argb(90, 255, 0, 0))
+                .radius(100);
+        geoFenceLimits = googleMap.addCircle(circleBO);
+
+        CircleOptions circleLuceros = new CircleOptions()
+                .center(luceros.getPosition())
+                .strokeColor(Color.argb(40, 255, 0, 0))
+                .fillColor(Color.argb(90, 255, 0, 0))
+                .radius(100);
+        geoFenceLimits = googleMap.addCircle(circleLuceros);
+
+        LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, true);
+        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        double latitude = myLocation.getLatitude();
+        double longitude = myLocation.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));;
     }
 }

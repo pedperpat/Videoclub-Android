@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
-// TODO: Mostrar contactos de forma correcta
+// TODO: Mostrar contactos de forma correcta y conectando a la base de datos.
 
 public class Contactos extends AppCompatActivity {
     Button button;
